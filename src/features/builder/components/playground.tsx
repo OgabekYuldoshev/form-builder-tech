@@ -1,11 +1,7 @@
 import { Box, Container } from "@mantine/core";
-import { useShallow } from "zustand/shallow";
-import { useBuilderStore } from "../hooks/use-builder-store";
-import { ElementDropArea } from "./element-drop-area";
-import { EmptyDropArea } from "./empty-drop-area/empty-drop-area";
+import { ElementDropZone } from "./element-drop-zone";
 
 export function Playground() {
-  const stateLength = useBuilderStore(useShallow((state) => Object.values(state.rootIds).length));
 
   return (
     <Container fluid>
@@ -15,7 +11,7 @@ export function Playground() {
         maw="800"
         py="lg"
       >
-        {stateLength === 0 ? <EmptyDropArea /> : <ElementDropArea />}
+        <ElementDropZone parentId={null}/>
       </Box>
     </Container>
   );

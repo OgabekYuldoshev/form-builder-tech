@@ -1,5 +1,8 @@
 import type { Icon } from "@tabler/icons-react";
 import type { BuilderElementSchemas, BuilderElementSchemaTypes } from "./elements";
+import type { JSX } from "react";
+
+type WithAllowedChildren<T> = T & { children?: JSX.Element};
 
 type AnyProps = Record<string, unknown>;
 
@@ -42,10 +45,11 @@ interface ElementSchema<P = AnyProps> {
   displayName: string;
   icon: Icon;
   defaultProps: P;
+  allowedChildren?: string[];
   propsSchema: {
     [K in keyof P]: PropField<P[K]>;
   };
-  render: (props: ElementInstance<P>) => React.ReactNode;
+  render: (props: WithAllowedChildren<ElementInstance<P>>) => React.ReactNode;
 }
 
 type StarterDraggableElementData = {
@@ -65,5 +69,6 @@ export type {
   PropField,
   SelectFieldOption,
   StarterDraggableElementData,
-  DraggableElementData
+  DraggableElementData,
+  WithAllowedChildren
 };

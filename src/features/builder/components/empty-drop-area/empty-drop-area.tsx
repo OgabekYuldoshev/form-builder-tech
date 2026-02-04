@@ -7,10 +7,15 @@ import { useBuilderStore } from "../../hooks/use-builder-store";
 import type { ElementInstance, StarterDraggableElementData } from "../../types";
 import styles from "./empty-drop-area.module.scss";
 
-export function EmptyDropArea() {
+interface EmptyDropAreaProps {
+  parentId: string | null;
+}
+export function EmptyDropArea({parentId}: EmptyDropAreaProps) {
   const handleInsert = useBuilderStore((state) => state.handleInsert);
   const [isOver, setIsOver] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
+
+  console.log(parentId)
 
   useEffect(() => {
     invariant(elementRef.current, "Element ref not found");

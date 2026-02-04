@@ -80,7 +80,10 @@ const createBuilderStore = (initialData?: Partial<BuilderStore>) => {
           }),
         handleUpdateProperty: (elementId, values) =>
           set((state) => {
-            state.elements[elementId].props = values;
+            state.elements[elementId].props = {
+              ...state.elements[elementId].props,
+              ...values
+            };
           }),
         handleDelete: (elementId) =>
           set((state) => {

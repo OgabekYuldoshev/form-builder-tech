@@ -19,15 +19,15 @@ export const EditorElement: ElementSchema<EditorProps> = {
   propsSchema: {
     label: {
       type: "input",
-      label: "Label",
+      label: "Label"
     },
     placeholder: {
       type: "input",
-      label: "Placeholder",
+      label: "Placeholder"
     },
     content: {
-       type: "input",
-       label: "Content",
+      type: "input",
+      label: "Content"
     }
   },
   render({ id, props }) {

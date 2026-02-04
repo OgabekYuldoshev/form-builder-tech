@@ -16,17 +16,17 @@ interface InputField extends BaseField {
 interface SelectField extends BaseField {
   type: "select";
   options: SelectFieldOption[];
-};
+}
 
 interface TextAreaField extends BaseField {
   type: "textarea";
   placeholder?: string;
-};
+}
 
 interface NumberField extends BaseField {
   type: "number";
   placeholder?: string;
-};
+}
 
 type PropField<_Value> = InputField | SelectField | TextAreaField | NumberField;
 

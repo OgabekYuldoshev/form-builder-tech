@@ -1,43 +1,57 @@
-import { Textarea } from "@mantine/core";
 import { IconForms } from "@tabler/icons-react";
+import { Editor } from "@/components/editor";
 import type { ElementSchema } from "../types";
 
-export interface EditorProps {
+export interface EditorElementProps {
   label: string;
   placeholder: string;
   content: string;
+  /** Select dan "true" | "false" keladi */
+  disabled: boolean | string;
 }
 
-export const EditorElement: ElementSchema<EditorProps> = {
+export const EditorElement: ElementSchema<EditorElementProps> = {
   displayName: "Editor",
   icon: IconForms,
   defaultProps: {
     label: "Editor",
     placeholder: "Editor placeholder",
-    content: "Editor content"
+    content: "",
+    disabled: "false",
   },
   propsSchema: {
     label: {
       type: "input",
-      label: "Label"
+      label: "Label",
     },
     placeholder: {
       type: "input",
-      label: "Placeholder"
+      label: "Placeholder",
     },
     content: {
-      type: "input",
-      label: "Content"
-    }
+      type: "textarea",
+      label: "Content",
+    },
+    disabled: {
+      type: "select",
+      label: "Disabled",
+      options: [
+        { value: "false", label: "Yo'q" },
+        { value: "true", label: "Ha" },
+      ],
+    },
   },
   render({ id, props }) {
+    const disabled =
+      props.disabled === true || props.disabled === "true";
     return (
-      <Textarea
+      <Editor
         id={id}
         label={props.label}
         placeholder={props.placeholder}
-        disabled
+        value={props.content}
+        disabled={disabled}
       />
     );
-  }
+  },
 };

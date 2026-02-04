@@ -1,62 +1,44 @@
-import type { ReactNode } from "react";
+type AnyProps = Record<string, unknown>;
 
-export type SelectOption = { value: string; label: string };
+type SelectFieldOption = { value: string; label: string };
 
-export type PropSchemaBase = {
-  label: string;
-};
-
-export type PropSchemaText = PropSchemaBase & { type: "text" };
-export type PropSchemaNumber = PropSchemaBase & { type: "number" };
-export type PropSchemaDate = PropSchemaBase & { type: "date" };
-
-export type PropSchemaSelect = PropSchemaBase & {
-  type: "select";
-  options?: SelectOption[];
-  optionsUrl?: string;
-  optionsLoader?: () => Promise<SelectOption[]>;
-};
-
-export type PropSchemaCheckbox = PropSchemaBase & { type: "checkbox" };
-
-/** Editable list of { value, label } for select/dropdown options in builder */
-export type PropSchemaOptionsList = PropSchemaBase & { type: "optionsList" };
-
-export type PropSchema =
-  | PropSchemaText
-  | PropSchemaNumber
-  | PropSchemaDate
-  | PropSchemaSelect
-  | PropSchemaCheckbox
-  | PropSchemaOptionsList;
-
-export type PropSchemas<P extends Record<string, unknown>> = {
-  [K in keyof P]: PropSchema;
-};
-
-export interface NodeInstance {
-  id: string;
-  type: string;
-  props: Record<string, unknown>;
-  /** Parent container instance id; null = root level */
-  parentId: string | null;
-  /** Order among siblings (same parentId) */
-  sortOrder: number;
+type InputField = {
+    type: 'input',
+    placeholder: string;
 }
 
-export interface NodeDefinition<P extends Record<string, unknown> = Record<string, unknown>> {
-  type: string;
-  label: string;
-  defaultProps: P;
-  propSchema: PropSchemas<P>;
-  render: (props: P & { id: string; children?: ReactNode }) => ReactNode;
-  /** If set, this node is a container; only these node types can be dropped inside */
-  allowList?: string[];
+type SelectField = {
+    type: 'select',
+    options: SelectFieldOption[];
 }
 
-/** Any node definition (for provider props). */
-export type AnyNodeDefinition = NodeDefinition<Record<string, unknown>>;
-
-export interface FormSchema {
-  nodes: NodeInstance[];
+type TextAreaField = {
+    type: 'textarea',
+    placeholder: string;
 }
+
+type NumberField = {
+    type: 'number',
+    placeholder: string;
+}
+
+type PropField<_Value> = InputField | SelectField | TextAreaField | NumberField;
+
+interface ElementInstance<P = AnyProps> {
+    id: string;
+    type: string;
+    props: P;
+    parentId: string | null;
+    position: number
+}
+
+interface ElementSchema<P = AnyProps> {
+    type: string;
+    defaultProps: P;
+    propsSchema: {
+        [K in keyof P]: PropField<P[K]>
+    }
+    render: (props: ElementInstance<P>) => React.ReactNode;
+}
+
+export type { ElementInstance, ElementSchema, PropField, SelectFieldOption };

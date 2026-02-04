@@ -19,14 +19,15 @@ export const TextareaElement: ElementSchema<TextareaProps> = {
   propsSchema: {
     label: {
       type: "input",
-      placeholder: "Label"
+      label: "Label"
     },
     placeholder: {
       type: "input",
-      placeholder: "Placeholder"
+      label: "Placeholder"
     },
     rows: {
       type: "select",
+      label: "Rows",
       options: [
         { label: "Rows 1", value: "1" },
         { label: "Rows 2", value: "2" },

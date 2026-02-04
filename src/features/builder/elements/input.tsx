@@ -17,11 +17,11 @@ export const InputElement: ElementSchema<InputProps> = {
   propsSchema: {
     label: {
       type: "input",
-      placeholder: "Label"
+      label: "Label"
     },
     placeholder: {
       type: "input",
-      placeholder: "Placeholder"
+      label: "Placeholder"
     }
   },
   render({ id, props }) {

@@ -14,8 +14,8 @@ export const TitleElement: ElementSchema<TitleProps> = {
   },
   propsSchema: {
     content: {
-      type: "input",
-      placeholder: "Title"
+      type: "textarea",
+      label: "Content"
     }
   },
   render({ id, props }) {

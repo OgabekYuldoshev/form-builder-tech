@@ -4,25 +4,28 @@ import type { BuilderElementSchemas, BuilderElementSchemaTypes } from "./element
 type AnyProps = Record<string, unknown>;
 
 type SelectFieldOption = { value: string; label: string };
-
-type InputField = {
-  type: "input";
-  placeholder: string;
+type BaseField = {
+  label: string;
 };
 
-type SelectField = {
+interface InputField extends BaseField {
+  type: "input";
+  placeholder?: string;
+}
+
+interface SelectField extends BaseField {
   type: "select";
   options: SelectFieldOption[];
 };
 
-type TextAreaField = {
+interface TextAreaField extends BaseField {
   type: "textarea";
-  placeholder: string;
+  placeholder?: string;
 };
 
-type NumberField = {
+interface NumberField extends BaseField {
   type: "number";
-  placeholder: string;
+  placeholder?: string;
 };
 
 type PropField<_Value> = InputField | SelectField | TextAreaField | NumberField;

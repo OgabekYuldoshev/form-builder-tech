@@ -11,6 +11,7 @@ interface BuilderStore {
   selectedElementId: string | null;
   handleInsert: (element: ElementInstance, targetPosition?: number) => void;
   handleMove: (elementId: string, targetPosition: number) => void;
+  handleUpdateProperty: (elementId: string, values: Record<string, unknown>) => void;
   handleDelete: (elementId: string) => void;
   handleSelect: (elementId: string) => void;
 }
@@ -76,6 +77,10 @@ const createBuilderStore = (initialData?: Partial<BuilderStore>) => {
                 }
               });
             }
+          }),
+        handleUpdateProperty: (elementId, values) =>
+          set((state) => {
+            state.elements[elementId].props = values;
           }),
         handleDelete: (elementId) =>
           set((state) => {

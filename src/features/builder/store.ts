@@ -87,6 +87,14 @@ const createBuilderStore = (initialData?: Partial<BuilderStore>) => {
           }),
         handleDelete: (elementId) =>
           set((state) => {
+            if (state.selectedElementId === elementId) {
+              state.selectedElementId = null;
+            }
+
+            if (state.rootIds.includes(elementId)) {
+              state.rootIds = state.rootIds.filter((id) => id !== elementId);
+            }
+
             delete state.elements[elementId];
           }),
         handleSelect: (elementId) =>

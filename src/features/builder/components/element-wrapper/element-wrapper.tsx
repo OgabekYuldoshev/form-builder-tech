@@ -10,7 +10,7 @@ import {
   extractClosestEdge
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { DropIndicator } from "@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box";
-import { Box } from "@mantine/core";
+import { ActionIcon, Box, Group } from "@mantine/core";
 import invariant from "invariant";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { generateUUID } from "@/utils/generate-uuid";
@@ -21,6 +21,7 @@ import type {
   StarterDraggableElementData
 } from "../../types";
 import styles from "./element-wrapper.module.scss";
+import { IconTrash } from "@tabler/icons-react";
 
 interface ElementWrapperProps {
   children: React.ReactNode;
@@ -28,6 +29,7 @@ interface ElementWrapperProps {
 }
 
 export function ElementWrapper({ children, elementInstance }: ElementWrapperProps) {
+  const handleDelete = useBuilderStore((state) => state.handleDelete);
   const handleInsert = useBuilderStore((state) => state.handleInsert);
   const handleMove = useBuilderStore((state) => state.handleMove);
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
@@ -106,8 +108,6 @@ export function ElementWrapper({ children, elementInstance }: ElementWrapperProp
           }
           const targetData = target.data as DraggableElementData;
 
-          // from left bar
-
           if (sourceData.sourceType === "starter") {
             const closestEdgeOfTarget = extractClosestEdge(targetData);
 
@@ -154,6 +154,15 @@ export function ElementWrapper({ children, elementInstance }: ElementWrapperProp
       className={styles.wrapper}
       onClick={() => handleSelect(elementInstance.id)}
     >
+      <Group className={styles.actions} data-is-hidden={selectedElementId !== elementInstance.id}>
+        <ActionIcon variant="transparent" onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation();
+          handleDelete(elementInstance.id);
+        }}>
+          <IconTrash size={16} color="var(--mantine-color-red-6)" />
+        </ActionIcon>
+      </Group>
       {children}
       {closestEdge && (
         <DropIndicator

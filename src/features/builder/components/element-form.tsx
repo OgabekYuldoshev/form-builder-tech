@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import type { BuilderElementSchemaTypes } from "../elements";
 import { useBuilderContext } from "../hooks/use-builder-context";
 import { useBuilderStore } from "../hooks/use-builder-store";
+import { useShallow } from "zustand/shallow";
 
 interface ElementFormProps {
   elementId: string;
@@ -11,11 +12,9 @@ interface ElementFormProps {
 export function ElementForm({ elementId }: ElementFormProps) {
   const { elementSchemas } = useBuilderContext();
   const handleUpdateProperty = useBuilderStore((state) => state.handleUpdateProperty);
-  const element = useBuilderStore((state) => state.elements[elementId]);
-  const elementSchema = useMemo(
-    () => elementSchemas[element.type as BuilderElementSchemaTypes],
-    [element]
-  );
+  const element = useBuilderStore(useShallow((state) => state.elements[elementId]));
+  console.log(element)
+  const elementSchema = elementSchemas[element.type as BuilderElementSchemaTypes]
 
   const renderFields = useMemo(() => {
     return Object.entries(elementSchema.propsSchema).map(([key, value]) => {

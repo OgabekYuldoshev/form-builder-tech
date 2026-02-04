@@ -3,11 +3,11 @@ import { BuilderProvider } from "../components/builder-provider";
 import { LeftBar } from "../components/left-bar";
 import { Playground } from "../components/playground";
 import { RightBar } from "../components/right-bar";
-import { builderElements } from "../elements";
+import { builderElementSchemas } from "../elements";
 
 export function IndexPage() {
   return (
-    <BuilderProvider elements={builderElements}>
+    <BuilderProvider elementSchemas={builderElementSchemas}>
       <AppShell
         header={{ height: 60 }}
         navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: true } }}

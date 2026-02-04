@@ -1,5 +1,5 @@
 import type { Icon } from "@tabler/icons-react";
-import type { BuilderElements, BuilderElementTypes } from "./elements";
+import type { BuilderElementSchemas, BuilderElementSchemaTypes } from "./elements";
 
 type AnyProps = Record<string, unknown>;
 
@@ -47,8 +47,8 @@ interface ElementSchema<P = AnyProps> {
 
 type StarterDraggableElementData = {
   sourceType: "starter";
-  type: BuilderElementTypes
-  schema: BuilderElements[BuilderElementTypes]
+  type: BuilderElementSchemaTypes
+  schema: BuilderElementSchemas[BuilderElementSchemaTypes]
 }
 
 type DraggableElementData = {

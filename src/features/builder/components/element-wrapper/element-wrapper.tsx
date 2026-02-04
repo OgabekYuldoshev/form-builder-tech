@@ -12,10 +12,11 @@ import {
 import { DropIndicator } from "@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box";
 import { Box } from "@mantine/core";
 import invariant from "invariant";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useBuilderStore } from "../../hooks/use-builder-store";
-import type { ElementInstance } from "../../types";
+import type { DraggableElementData, ElementInstance, StarterDraggableElementData } from "../../types";
 import styles from "./element-wrapper.module.scss";
+import { generateUUID } from "@/utils/generate-uuid";
 
 interface ElementWrapperProps {
   children: React.ReactNode;
@@ -23,29 +24,48 @@ interface ElementWrapperProps {
 }
 
 export function ElementWrapper({ children, elementInstance }: ElementWrapperProps) {
+  const handleInsert = useBuilderStore((state) => state.handleInsert);
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
-
   const [isDragging, setIsDragging] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
   const handleSelect = useBuilderStore((state) => state.handleSelect);
   const selectedElementId = useBuilderStore((state) => state.selectedElementId);
 
+  const initalData: DraggableElementData = useMemo(() => ({
+    sourceType: "element",
+    elementInstance
+  }), [elementInstance]);
+
   useEffect(() => {
     const element = elementRef.current;
     invariant(element, "Element ref not found");
-    const userData = {
-      ...elementInstance
-    };
 
     function onChange({ source, self }: ElementDropTargetEventBasePayload) {
-      const closestEdge = extractClosestEdge(source.data);
+      const element = elementRef.current;
+      invariant(element, "Element ref not found");
+
+      if(source.element === element){
+        setClosestEdge(null);
+        return;
+      }
+
+      const sourceData = source.data as DraggableElementData | StarterDraggableElementData;
+      let _index = 0
+
+      if ("index" in sourceData && typeof sourceData.index === "number") {
+        _index = sourceData.index;
+      }
+
+      const closestEdge = extractClosestEdge(self.data);
+
+      setClosestEdge(closestEdge);
     }
 
     return combine(
       draggable({
         element,
         getInitialData() {
-          return userData;
+          return initalData;
         },
         onDragStart() {
           setIsDragging(true);
@@ -57,7 +77,7 @@ export function ElementWrapper({ children, elementInstance }: ElementWrapperProp
       dropTargetForElements({
         element,
         getData({ input }) {
-          return attachClosestEdge(userData, {
+          return attachClosestEdge(initalData, {
             element,
             input,
             allowedEdges: ["top", "bottom"]
@@ -68,12 +88,43 @@ export function ElementWrapper({ children, elementInstance }: ElementWrapperProp
         onDragLeave() {
           setClosestEdge(null);
         },
-        onDrop() {
+        onDrop({source, location}) {
           setClosestEdge(null);
+          const sourceData = source.data as DraggableElementData | StarterDraggableElementData;
+          const target = location.current.dropTargets[0];
+
+          if(!target){
+            return;
+          }
+          const targetData = target.data as DraggableElementData;
+
+          // from left bar
+
+          if(sourceData.sourceType === "starter"){
+            const closestEdgeOfTarget = extractClosestEdge(targetData);
+
+            const id = generateUUID()
+            console.log(targetData)
+
+            const targetPosition = closestEdgeOfTarget === "top" ? targetData.elementInstance.position : targetData.elementInstance.position + 1;
+
+            const newElement: ElementInstance = {
+              id,
+              type: sourceData.type,
+              props: {
+                ...sourceData.schema.defaultProps
+              },
+              parentId: null,
+              position: targetPosition
+            };
+
+            handleInsert(newElement);
+          }
+
         }
       })
     );
-  }, [elementInstance]);
+  }, [initalData]);
 
   return (
     <Box

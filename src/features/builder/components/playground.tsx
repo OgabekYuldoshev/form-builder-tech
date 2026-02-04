@@ -5,7 +5,7 @@ import { ElementDropArea } from "./element-drop-area";
 import { EmptyDropArea } from "./empty-drop-area/empty-drop-area";
 
 export function Playground() {
-  const stateLength = useBuilderStore(useShallow((state) => Object.values(state.state).length));
+  const stateLength = useBuilderStore(useShallow((state) => Object.values(state.rootIds).length));
 
   return (
     <Container fluid>

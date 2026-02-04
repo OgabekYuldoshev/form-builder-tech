@@ -1,31 +1,32 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: off */
 import { Flex } from "@mantine/core";
-import { useMemo } from "react";
-import type { BuilderElementTypes } from "../elements";
+import type { BuilderElementSchemaTypes } from "../elements";
 import { useBuilderContext } from "../hooks/use-builder-context";
 import { useBuilderStore } from "../hooks/use-builder-store";
 import type { ElementInstance } from "../types";
 import { ElementWrapper } from "./element-wrapper";
 
 export function ElementDropArea() {
-  const { elements } = useBuilderContext();
-  const state = useBuilderStore((state) => state.state);
-
-  const items = useMemo(() => {
-    return Object.values(state)
-      .filter((element) => element.parentId === null)
-      .sort((a, b) => a.position - b.position);
-  }, [state]);
+  const { elementSchemas } = useBuilderContext();
+  const rootNodes = useBuilderStore((state) => state.rootIds);
+  const elements = useBuilderStore((state) => state.elements);
 
   return (
     <Flex direction="column">
-      {items.map((e) => {
-        const element = elements[e.type as BuilderElementTypes];
-        const component = element.render(e as ElementInstance<any>);
+      {rootNodes.map((elementId) => {
+        const elementInstance = elements[elementId];
+
+        if(!elementInstance){
+          return null;
+        }
+
+        const elementSchema = elementSchemas[elementInstance.type as BuilderElementSchemaTypes];
+        const component = elementSchema.render(elementInstance as unknown as ElementInstance<any>);
+
         return (
           <ElementWrapper
-            key={e.id}
-            elementInstance={e}
+            key={elementInstance.id}
+            elementInstance={elementInstance}
           >
             {component}
           </ElementWrapper>

@@ -1,12 +1,12 @@
 import { Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
-import type { BuilderElementTypes } from "../elements";
+import type { BuilderElementSchemaTypes } from "../elements";
 import { useBuilderContext } from "../hooks/use-builder-context";
 import { DraggableElement } from "./draggable-element/draggable-element";
 
 export function LeftBar() {
-  const { elements } = useBuilderContext();
-  const items = useMemo(() => Object.entries(elements), [elements]);
+  const { elementSchemas } = useBuilderContext();
+  const items = useMemo(() => Object.entries(elementSchemas), [elementSchemas]);
 
   return (
     <Stack>
@@ -21,7 +21,7 @@ export function LeftBar() {
         {items.map(([type, schema]) => (
           <DraggableElement
             key={type}
-            type={type as BuilderElementTypes}
+            type={type as BuilderElementSchemaTypes}
             schema={schema}
           />
         ))}

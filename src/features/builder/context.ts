@@ -1,10 +1,10 @@
 import { createContext } from "react";
 import type { StoreApi } from "zustand";
-import type { BuilderElements } from "./elements";
+import type { BuilderElementSchemas } from "./elements";
 import type { BuilderStore } from "./store";
 
 interface BuilderContextType {
-  elements: BuilderElements;
+  elementSchemas: BuilderElementSchemas;
   store: StoreApi<BuilderStore>;
 }
 

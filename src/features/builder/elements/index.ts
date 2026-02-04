@@ -1,10 +1,10 @@
 import { InputElement } from "./input";
 import { TitleElement } from "./title";
 
-export const builderElements = {
+export const builderElementSchemas = {
   title: TitleElement,
   input: InputElement
 };
 
-export type BuilderElements = typeof builderElements;
-export type BuilderElementTypes = keyof BuilderElements;
+export type BuilderElementSchemas = typeof builderElementSchemas;
+export type BuilderElementSchemaTypes = keyof BuilderElementSchemas;

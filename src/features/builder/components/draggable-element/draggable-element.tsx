@@ -2,13 +2,13 @@ import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { Box, Flex, Text } from "@mantine/core";
 import invariant from "invariant";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { BuilderElements, BuilderElementTypes } from "../../elements";
 import styles from "./draggable-element.module.scss";
 import type { StarterDraggableElementData } from "../../types";
+import type { BuilderElementSchemaTypes, BuilderElementSchemas } from "../../elements";
 
 interface DraggableElementProps {
-  type: BuilderElementTypes;
-  schema: BuilderElements[BuilderElementTypes];
+  type: BuilderElementSchemaTypes;
+  schema: BuilderElementSchemas[BuilderElementSchemaTypes];
 }
 export function DraggableElement({ type, schema }: DraggableElementProps) {
   const elementRef = useRef<HTMLDivElement>(null);

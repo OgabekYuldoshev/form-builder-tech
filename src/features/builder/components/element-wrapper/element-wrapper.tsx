@@ -1,58 +1,95 @@
+import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
+import {
+  draggable,
+  dropTargetForElements,
+  type ElementDropTargetEventBasePayload
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import {
+  attachClosestEdge,
+  type Edge,
+  extractClosestEdge
+} from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
+import { DropIndicator } from "@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box";
 import { Box } from "@mantine/core";
-
-import styles from "./element-wrapper.module.scss";
-import type { ElementInstance } from "../../types";
-import { useBuilderStore } from "../../hooks/use-builder-store";
-import { useEffect, useRef, useState } from "react";
-import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import {combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 import invariant from "invariant";
-
+import { useEffect, useRef, useState } from "react";
+import { useBuilderStore } from "../../hooks/use-builder-store";
+import type { ElementInstance } from "../../types";
+import styles from "./element-wrapper.module.scss";
 
 interface ElementWrapperProps {
-    children: React.ReactNode;
-    element: ElementInstance;
+  children: React.ReactNode;
+  elementInstance: ElementInstance;
 }
 
-export function ElementWrapper({ children, element }: ElementWrapperProps) {
-    const [isDragging, setIsDragging] = useState(false);
-    const elementRef = useRef<HTMLDivElement>(null);
-    const handleSelect = useBuilderStore((state) => state.handleSelect);
-    const selectedElementId = useBuilderStore((state) => state.selectedElementId);
+export function ElementWrapper({ children, elementInstance }: ElementWrapperProps) {
+  const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
 
-    useEffect(() => {
-        invariant(elementRef.current, "Element ref not found");
+  const [isDragging, setIsDragging] = useState(false);
+  const elementRef = useRef<HTMLDivElement>(null);
+  const handleSelect = useBuilderStore((state) => state.handleSelect);
+  const selectedElementId = useBuilderStore((state) => state.selectedElementId);
 
-        return combine(
-            draggable({
-                element: elementRef.current,
-                onDragStart(){
-                    setIsDragging(true);
-                },
-                onDrop(){
-                    setIsDragging(false);
-                }
-            }),
-            dropTargetForElements({
-                element: elementRef.current,
-                onDrop(event){
-                    console.log(event)
-                }
-            })
-        )
-    }, []);
+  useEffect(() => {
+    const element = elementRef.current;
+    invariant(element, "Element ref not found");
+    const userData = {
+      ...elementInstance
+    };
 
+    function onChange({ source, self }: ElementDropTargetEventBasePayload) {
+      const closestEdge = extractClosestEdge(source.data);
+    }
 
-
-    return (
-        <Box
-            ref={elementRef}
-            data-selected={selectedElementId === element.id}
-            data-dragging={isDragging}
-            className={styles.wrapper}
-            onClick={() => handleSelect(element.id)}
-        >
-            {children}
-        </Box>
+    return combine(
+      draggable({
+        element,
+        getInitialData() {
+          return userData;
+        },
+        onDragStart() {
+          setIsDragging(true);
+        },
+        onDrop() {
+          setIsDragging(false);
+        }
+      }),
+      dropTargetForElements({
+        element,
+        getData({ input }) {
+          return attachClosestEdge(userData, {
+            element,
+            input,
+            allowedEdges: ["top", "bottom"]
+          });
+        },
+        onDragEnter: onChange,
+        onDrag: onChange,
+        onDragLeave() {
+          setClosestEdge(null);
+        },
+        onDrop() {
+          setClosestEdge(null);
+        }
+      })
     );
+  }, [elementInstance]);
+
+  return (
+    <Box
+      ref={elementRef}
+      data-selected={selectedElementId === elementInstance.id}
+      data-dragging={isDragging}
+      className={styles.wrapper}
+      onClick={() => handleSelect(elementInstance.id)}
+    >
+      {children}
+      {closestEdge && (
+        <DropIndicator
+          edge={closestEdge}
+          gap="1px"
+        />
+      )}
+    </Box>
+  );
 }

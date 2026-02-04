@@ -4,6 +4,7 @@ import invariant from "invariant";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { BuilderElements, BuilderElementTypes } from "../../elements";
 import styles from "./draggable-element.module.scss";
+import type { StarterDraggableElementData } from "../../types";
 
 interface DraggableElementProps {
   type: BuilderElementTypes;
@@ -15,8 +16,9 @@ export function DraggableElement({ type, schema }: DraggableElementProps) {
 
   const Icon = schema.icon;
 
-  const initialData = useMemo(
+  const initialData: StarterDraggableElementData = useMemo(
     () => ({
+      sourceType: "starter",
       type,
       schema
     }),

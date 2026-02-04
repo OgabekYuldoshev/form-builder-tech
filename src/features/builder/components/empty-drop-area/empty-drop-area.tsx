@@ -3,15 +3,10 @@ import { Box, Flex, Text } from "@mantine/core";
 import invariant from "invariant";
 import { useEffect, useRef, useState } from "react";
 import { generateUUID } from "@/utils/generate-uuid";
-import type { BuilderElements, BuilderElementTypes } from "../../elements";
 import { useBuilderStore } from "../../hooks/use-builder-store";
-import type { ElementInstance } from "../../types";
+import type { ElementInstance, StarterDraggableElementData } from "../../types";
 import styles from "./empty-drop-area.module.scss";
 
-interface SourceData {
-  type: BuilderElementTypes;
-  schema: BuilderElements[BuilderElementTypes];
-}
 
 export function EmptyDropArea() {
   const handleInsert = useBuilderStore((state) => state.handleInsert);
@@ -23,11 +18,12 @@ export function EmptyDropArea() {
 
     return dropTargetForElements({
       element: elementRef.current,
+      canDrop: ({ source }) => source.data.sourceType === "starter",
       onDragEnter: () => setIsOver(true),
       onDragLeave: () => setIsOver(false),
       onDrop: ({ source }) => {
         console.log("Dropped", event);
-        const data = source.data as unknown as SourceData;
+        const data = source.data as unknown as StarterDraggableElementData;
 
         const id = generateUUID();
         const newElement: ElementInstance = {

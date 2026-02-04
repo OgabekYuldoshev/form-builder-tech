@@ -1,4 +1,5 @@
 import type { Icon } from "@tabler/icons-react";
+import type { BuilderElements, BuilderElementTypes } from "./elements";
 
 type AnyProps = Record<string, unknown>;
 
@@ -44,4 +45,15 @@ interface ElementSchema<P = AnyProps> {
   render: (props: ElementInstance<P>) => React.ReactNode;
 }
 
-export type { ElementInstance, ElementSchema, PropField, SelectFieldOption };
+type StarterDraggableElementData = {
+  sourceType: "starter";
+  type: BuilderElementTypes
+  schema: BuilderElements[BuilderElementTypes]
+}
+
+type DraggableElementData = {
+  sourceType: "element";
+  elementInstance: ElementInstance;
+};
+
+export type { ElementInstance, ElementSchema, PropField, SelectFieldOption, StarterDraggableElementData, DraggableElementData };

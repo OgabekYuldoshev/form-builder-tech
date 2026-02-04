@@ -18,14 +18,19 @@ export function ElementDropArea() {
   }, [state]);
 
   return (
-    <Flex
-      direction="column"
-    >
+    <Flex direction="column">
       {items.map((e) => {
         const element = elements[e.type as BuilderElementTypes];
         const component = element.render(e as ElementInstance<any>);
-        return <ElementWrapper key={e.id} element={e}>{component}</ElementWrapper>;
+        return (
+          <ElementWrapper
+            key={e.id}
+            elementInstance={e}
+          >
+            {component}
+          </ElementWrapper>
+        );
       })}
-    </Flex> 
+    </Flex>
   );
 }

@@ -104,7 +104,6 @@ export function ElementWrapper({ children, elementInstance }: ElementWrapperProp
             const closestEdgeOfTarget = extractClosestEdge(targetData);
 
             const id = generateUUID()
-            console.log(targetData)
 
             const targetPosition = closestEdgeOfTarget === "top" ? targetData.elementInstance.position : targetData.elementInstance.position + 1;
 

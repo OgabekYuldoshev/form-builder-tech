@@ -1,9 +1,11 @@
 import { InputElement } from "./input";
+import { TextareaElement } from "./textarea";
 import { TitleElement } from "./title";
 
 export const builderElementSchemas = {
   title: TitleElement,
-  input: InputElement
+  input: InputElement,
+  textarea: TextareaElement
 };
 
 export type BuilderElementSchemas = typeof builderElementSchemas;

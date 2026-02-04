@@ -1,6 +1,5 @@
+import invariant from "invariant";
 import { useContext } from "react";
-import invariant from 'invariant'
-
 import { BuilderContext } from "../context";
 
 export function useBuilderContext() {

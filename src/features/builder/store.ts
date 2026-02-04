@@ -4,14 +4,14 @@ import { loggerMiddleware } from "../../lib/zustand-logger";
 import type { ElementInstance } from "./types";
 
 interface BuilderStore {
-  nodes: Record<string, ElementInstance>;
+  state: Record<string, ElementInstance>;
 }
 
 const createBuilderStore = () => {
   return createStore<BuilderStore>()(
     loggerMiddleware(
       immer(() => ({
-        nodes: {}
+        state: {}
       }))
     )
   );

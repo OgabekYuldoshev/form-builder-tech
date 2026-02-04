@@ -58,14 +58,7 @@ export function ElementWrapper({ children, elementInstance }: ElementWrapperProp
         setClosestEdge(null);
         return;
       }
-
-      const sourceData = source.data as DraggableElementData | StarterDraggableElementData;
-      let _index = 0;
-
-      if ("index" in sourceData && typeof sourceData.index === "number") {
-        _index = sourceData.index;
-      }
-
+  
       const closestEdge = extractClosestEdge(self.data);
 
       setClosestEdge(closestEdge);

@@ -2,9 +2,19 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { Box, Flex, Text } from "@mantine/core";
 import invariant from "invariant";
 import { useEffect, useRef, useState } from "react";
+import { generateUUID } from "@/utils/generate-uuid";
+import type { BuilderElements, BuilderElementTypes } from "../../elements";
+import { useBuilderStore } from "../../hooks/use-builder-store";
+import type { ElementInstance } from "../../types";
 import styles from "./empty-drop-area.module.scss";
 
+interface SourceData {
+  type: BuilderElementTypes;
+  schema: BuilderElements[BuilderElementTypes];
+}
+
 export function EmptyDropArea() {
+  const insert = useBuilderStore((state) => state.insert);
   const [isOver, setIsOver] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -15,8 +25,24 @@ export function EmptyDropArea() {
       element: elementRef.current,
       onDragEnter: () => setIsOver(true),
       onDragLeave: () => setIsOver(false),
-      onDrop: (event) => {
+      onDrop: ({ source }) => {
         console.log("Dropped", event);
+        const data = source.data as unknown as SourceData;
+
+        const id = generateUUID();
+        const newElement: ElementInstance = {
+          id,
+          type: data.type,
+          props: {
+            ...data.schema.defaultProps
+          },
+          parentId: null,
+          position: 0
+        };
+
+        insert(newElement);
+
+        setIsOver(false);
       }
     });
   }, []);

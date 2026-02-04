@@ -1,7 +1,7 @@
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { Box, Flex, Text } from "@mantine/core";
 import invariant from "invariant";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { BuilderElements, BuilderElementTypes } from "../../elements";
 import styles from "./draggable-element.module.scss";
 
@@ -15,15 +15,24 @@ export function DraggableElement({ type, schema }: DraggableElementProps) {
 
   const Icon = schema.icon;
 
+  const initialData = useMemo(
+    () => ({
+      type,
+      schema
+    }),
+    [type, schema]
+  );
+
   useEffect(() => {
     invariant(elementRef.current, "Element ref not found");
 
     return draggable({
       element: elementRef.current,
       onDragStart: () => setIsDragging(true),
-      onDrop: () => setIsDragging(false)
+      onDrop: () => setIsDragging(false),
+      getInitialData: () => initialData
     });
-  }, [type]);
+  }, [initialData]);
 
   return (
     <Box

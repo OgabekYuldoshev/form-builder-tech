@@ -7,7 +7,6 @@ import { useBuilderStore } from "../../hooks/use-builder-store";
 import type { ElementInstance, StarterDraggableElementData } from "../../types";
 import styles from "./empty-drop-area.module.scss";
 
-
 export function EmptyDropArea() {
   const handleInsert = useBuilderStore((state) => state.handleInsert);
   const [isOver, setIsOver] = useState(false);

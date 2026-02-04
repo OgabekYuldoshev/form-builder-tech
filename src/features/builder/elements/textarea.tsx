@@ -1,11 +1,11 @@
+import { Textarea } from "@mantine/core";
 import { IconForms } from "@tabler/icons-react";
 import type { ElementSchema } from "../types";
-import { Textarea } from "@mantine/core";
 
 export interface TextareaProps {
- label: string;
- placeholder: string;
- rows: number
+  label: string;
+  placeholder: string;
+  rows: number;
 }
 
 export const TextareaElement: ElementSchema<TextareaProps> = {
@@ -16,7 +16,7 @@ export const TextareaElement: ElementSchema<TextareaProps> = {
     placeholder: "Textarea placeholder",
     rows: 4
   },
-  propsSchema:{
+  propsSchema: {
     label: {
       type: "input",
       placeholder: "Label"
@@ -35,7 +35,7 @@ export const TextareaElement: ElementSchema<TextareaProps> = {
         { label: "Rows 5", value: "5" },
         { label: "Rows 6", value: "6" },
         { label: "Rows 7", value: "7" },
-        { label: "Rows 8", value: "8" },
+        { label: "Rows 8", value: "8" }
       ]
     }
   },

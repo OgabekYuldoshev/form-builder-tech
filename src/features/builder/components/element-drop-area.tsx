@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: off */
-import { Flex } from "@mantine/core";
+import { Box, Flex } from "@mantine/core";
 import type { BuilderElementSchemaTypes } from "../elements";
 import { useBuilderContext } from "../hooks/use-builder-context";
 import { useBuilderStore } from "../hooks/use-builder-store";
@@ -12,11 +12,14 @@ export function ElementDropArea() {
   const elements = useBuilderStore((state) => state.elements);
 
   return (
-    <Flex direction="column">
+    <Flex
+      direction="column"
+      gap="xs"
+    >
       {rootNodes.map((elementId) => {
         const elementInstance = elements[elementId];
 
-        if(!elementInstance){
+        if (!elementInstance) {
           return null;
         }
 
@@ -28,7 +31,7 @@ export function ElementDropArea() {
             key={elementInstance.id}
             elementInstance={elementInstance}
           >
-            {component}
+            <Box style={{ pointerEvents: "none" }}>{component}</Box>
           </ElementWrapper>
         );
       })}

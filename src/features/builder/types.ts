@@ -47,13 +47,20 @@ interface ElementSchema<P = AnyProps> {
 
 type StarterDraggableElementData = {
   sourceType: "starter";
-  type: BuilderElementSchemaTypes
-  schema: BuilderElementSchemas[BuilderElementSchemaTypes]
-}
+  type: BuilderElementSchemaTypes;
+  schema: BuilderElementSchemas[BuilderElementSchemaTypes];
+};
 
 type DraggableElementData = {
   sourceType: "element";
   elementInstance: ElementInstance;
 };
 
-export type { ElementInstance, ElementSchema, PropField, SelectFieldOption, StarterDraggableElementData, DraggableElementData };
+export type {
+  ElementInstance,
+  ElementSchema,
+  PropField,
+  SelectFieldOption,
+  StarterDraggableElementData,
+  DraggableElementData
+};

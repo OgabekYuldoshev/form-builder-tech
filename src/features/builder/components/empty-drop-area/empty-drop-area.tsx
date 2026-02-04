@@ -14,7 +14,7 @@ interface SourceData {
 }
 
 export function EmptyDropArea() {
-  const insert = useBuilderStore((state) => state.insert);
+  const handleInsert = useBuilderStore((state) => state.handleInsert);
   const [isOver, setIsOver] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +40,7 @@ export function EmptyDropArea() {
           position: 0
         };
 
-        insert(newElement);
+        handleInsert(newElement);
 
         setIsOver(false);
       }

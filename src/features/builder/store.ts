@@ -5,7 +5,9 @@ import type { ElementInstance } from "./types";
 
 interface BuilderStore {
   state: Record<string, ElementInstance>;
-  insert: (element: ElementInstance) => void;
+  selectedElementId: string | null;
+  handleInsert: (element: ElementInstance) => void;
+  handleSelect: (elementId: string) => void;
 }
 
 const createBuilderStore = () => {
@@ -13,9 +15,14 @@ const createBuilderStore = () => {
     loggerMiddleware(
       immer((set) => ({
         state: {},
-        insert: (element) =>
+        selectedElementId: null,
+        handleInsert: (element) =>
           set((state) => {
             state.state[element.id] = element;
+          }),
+        handleSelect: (elementId) =>
+          set((state) => {
+            state.selectedElementId = elementId;
           })
       }))
     )

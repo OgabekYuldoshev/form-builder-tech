@@ -2,6 +2,7 @@ import { createStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { loggerMiddleware } from "../../lib/zustand-logger";
 import type { ElementInstance } from "./types";
+import { reorder } from '@atlaskit/pragmatic-drag-and-drop/reorder';
 
 interface BuilderStore {
   rootIds: string[];
@@ -9,6 +10,8 @@ interface BuilderStore {
   elements: Record<string, ElementInstance>;
   selectedElementId: string | null;
   handleInsert: (element: ElementInstance, targetPosition?: number) => void;
+  handleMove: (elementId: string, targetPosition: number) => void;
+  handleDelete: (elementId: string) => void;
   handleSelect: (elementId: string) => void;
 }
 
@@ -48,6 +51,28 @@ const createBuilderStore = () => {
                 }
               });
             }
+          }),
+        handleMove: (elementId, targetPosition) =>
+          set((state) => {
+            const element = state.elements[elementId];
+            if(element.parentId === null){
+
+              state.rootIds = reorder({
+                list: state.rootIds,
+                startIndex: element.position,
+                finishIndex: targetPosition
+              })
+              
+              state.rootIds.forEach((id, index) => {
+                if (state.elements[id]) {
+                  state.elements[id].position = index;
+                }
+              });
+            }
+          }),
+        handleDelete: (elementId) =>
+          set((state) => {
+            delete state.elements[elementId];
           }),
         handleSelect: (elementId) =>
           set((state) => {

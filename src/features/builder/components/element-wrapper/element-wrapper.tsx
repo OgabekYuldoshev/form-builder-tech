@@ -25,6 +25,7 @@ interface ElementWrapperProps {
 
 export function ElementWrapper({ children, elementInstance }: ElementWrapperProps) {
   const handleInsert = useBuilderStore((state) => state.handleInsert);
+  const handleMove = useBuilderStore((state) => state.handleMove);
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
@@ -118,6 +119,14 @@ export function ElementWrapper({ children, elementInstance }: ElementWrapperProp
             };
 
             handleInsert(newElement);
+          }
+
+          if(sourceData.sourceType === "element"){
+            const closestEdgeOfTarget = extractClosestEdge(targetData);
+
+            const targetPosition = closestEdgeOfTarget === "top" ? targetData.elementInstance.position : targetData.elementInstance.position + 1;
+
+            handleMove(sourceData.elementInstance.id, targetPosition);
           }
 
         }

@@ -4,6 +4,7 @@ import { LeftBar } from "../components/left-bar";
 import { Playground } from "../components/playground";
 import { RightBar } from "../components/right-bar";
 import { builderElementSchemas } from "../elements";
+import { Header } from "../components/header";
 
 const defaultData = {
   "a7fd7bdc-fd11-41db-ae3c-7995b71bd7bd": {
@@ -55,7 +56,7 @@ export function IndexPage() {
             h="100%"
             px="md"
           >
-            Header
+            <Header/>
           </Group>
         </AppShell.Header>
         <AppShell.Navbar p="md">

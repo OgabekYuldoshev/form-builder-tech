@@ -6,8 +6,6 @@ export interface EditorElementProps {
   label: string;
   placeholder: string;
   content: string;
-  /** Select dan "true" | "false" keladi */
-  disabled: boolean | string;
 }
 
 export const EditorElement: ElementSchema<EditorElementProps> = {
@@ -17,7 +15,6 @@ export const EditorElement: ElementSchema<EditorElementProps> = {
     label: "Editor",
     placeholder: "Editor placeholder",
     content: "",
-    disabled: "false",
   },
   propsSchema: {
     label: {
@@ -31,26 +28,16 @@ export const EditorElement: ElementSchema<EditorElementProps> = {
     content: {
       type: "textarea",
       label: "Content",
-    },
-    disabled: {
-      type: "select",
-      label: "Disabled",
-      options: [
-        { value: "false", label: "Yo'q" },
-        { value: "true", label: "Ha" },
-      ],
-    },
+    }
   },
   render({ id, props }) {
-    const disabled =
-      props.disabled === true || props.disabled === "true";
     return (
       <Editor
         id={id}
         label={props.label}
         placeholder={props.placeholder}
         value={props.content}
-        disabled={disabled}
+        disabled
       />
     );
   },

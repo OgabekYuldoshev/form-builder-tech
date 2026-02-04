@@ -14,4 +14,10 @@
     border-color: var(--mantine-color-blue-4);
     background-color: var(--mantine-color-blue-0);
   }
+
+  &[data-dragging="true"]{
+    opacity: 0.5;
+    border-color: var(--mantine-color-blue-4);
+    background-color: var(--mantine-color-blue-0);
+  }
 }

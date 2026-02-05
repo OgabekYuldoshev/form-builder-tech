@@ -10,7 +10,7 @@ interface BuilderStore {
   selectedNodeId: string | null;
   handleInsert(elementNode: ElementNode): void;
   handleUpdate(): void;
-  handleDelete(): void;
+  handleDelete(elementNodeId: string): void;
   handleMove(): void;
   handleSelectNode(value: string | null): void;
 }
@@ -63,7 +63,19 @@ function createBuilderStore(initialState: Partial<BuilderStore> = {}) {
             }
           }),
         handleUpdate: () => {},
-        handleDelete: () => {},
+        handleDelete: (elementNodeId) => {
+          set((state) => {
+            if (state.selectedNodeId === elementNodeId) {
+              state.selectedNodeId = null;
+            }
+
+            if (state.rootIds.includes(elementNodeId)) {
+              state.rootIds = state.rootIds.filter((id) => id !== elementNodeId);
+            }
+
+            delete state.nodes[elementNodeId];
+          });
+        },
         handleMove: () => {},
         handleSelectNode: (value) =>
           set((state) => {

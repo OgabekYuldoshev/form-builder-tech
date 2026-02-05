@@ -1,4 +1,5 @@
 import type { BuilderElementKey, BuilderElementSchema } from "@/elements";
+import type { ElementNode } from ".";
 
 type DraggableElementSchemaData = {
   sourceType: "schema";
@@ -6,4 +7,9 @@ type DraggableElementSchemaData = {
   schema: BuilderElementSchema;
 };
 
-export type { DraggableElementSchemaData };
+type DraggableElementNodeData = {
+  sourceType: "node";
+  elementNode: ElementNode;
+};
+
+export type { DraggableElementSchemaData, DraggableElementNodeData };

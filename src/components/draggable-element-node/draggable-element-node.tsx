@@ -22,6 +22,7 @@ import type { ElementNode } from "@/types";
 import type { DraggableElementNodeData, DraggableElementSchemaData } from "@/types/draggable-data";
 import { generateUUID } from "@/utils/generate-uuid";
 import classes from "./draggable-element-node.module.scss";
+import { ElementDropzone } from "../element-dropzone";
 
 interface DraggableElementNodeProps {
   elementNodeId: string;
@@ -34,6 +35,7 @@ function DraggableElementNodeComponent({ elementNodeId }: DraggableElementNodePr
   const { elementSchema } = useBuilderContext();
   const elementNode = useBuilderStore(useShallow((state) => state.nodes[elementNodeId]));
   const selectedNodeId = useBuilderStore((state) => state.selectedNodeId);
+  const schema = elementSchema[elementNode?.type as BuilderElementKey];
 
   const handleInsert = useBuilderStore((state) => state.handleInsert);
   const handleDelete = useBuilderStore((state) => state.handleDelete);
@@ -44,9 +46,22 @@ function DraggableElementNodeComponent({ elementNodeId }: DraggableElementNodePr
 
   const renderComponent = useCallback(
     (node: ElementNode) => {
-      return elementSchema[node.type as BuilderElementKey]?.render(node) ?? null;
+
+      invariant(schema != null, `Unknown element type: ${node.type} (elementId: ${node.id})`);
+
+      let children = undefined;
+
+
+      if ("allowedChildren" in schema && schema.allowedChildren?.length > 0) {
+        children = <ElementDropzone parentId={node.id} />
+      }
+
+      return schema.render({
+        ...node,
+        children
+      });
     },
-    [elementSchema, elementNode]
+    [schema, elementNode]
   );
 
   const initialData: DraggableElementNodeData = useMemo(() => {
@@ -87,6 +102,18 @@ function DraggableElementNodeComponent({ elementNodeId }: DraggableElementNodePr
       }),
       dropTargetForElements({
         element,
+        canDrop: ({ source }) => {
+          const sourceData = source.data as DraggableElementData;
+          if (schema.allowedChildren && schema.allowedChildren.length > 0) {
+            if (sourceData.sourceType === "schema") {
+              return schema.allowedChildren.includes(sourceData.type);
+            }
+            if (sourceData.sourceType === "node") {
+              return schema.allowedChildren.includes(sourceData.elementNode.type);
+            }
+          }
+          return true;
+        },
         getData({ input }) {
           return attachClosestEdge(initialData, {
             element,
@@ -107,6 +134,7 @@ function DraggableElementNodeComponent({ elementNodeId }: DraggableElementNodePr
           if (!target) {
             return;
           }
+
           const targetData = target.data as DraggableElementNodeData;
 
           if (sourceData.sourceType === "schema") {
@@ -151,7 +179,11 @@ function DraggableElementNodeComponent({ elementNodeId }: DraggableElementNodePr
     <Box
       className={classes.wrapper}
       ref={elementRef}
-      onClick={() => handleSelectNode(elementNodeId)}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleSelectNode(elementNodeId);
+      }}
       data-dragging={isDragging}
       data-selected={selectedNodeId === elementNodeId}
     >

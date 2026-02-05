@@ -2,7 +2,6 @@ import { Box, Container } from "@mantine/core";
 import { ElementDropZone } from "./element-drop-zone";
 
 export function Playground() {
-
   return (
     <Container fluid>
       <Box
@@ -11,7 +10,7 @@ export function Playground() {
         maw="800"
         py="lg"
       >
-        <ElementDropZone parentId={null}/>
+        <ElementDropZone parentId={null} />
       </Box>
     </Container>
   );

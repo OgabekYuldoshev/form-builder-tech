@@ -3,8 +3,8 @@ import { Flex } from "@mantine/core";
 import { memo } from "react";
 import { useShallow } from "zustand/shallow";
 import { useBuilderStore } from "../hooks/use-builder-store";
-import { EmptyDropArea } from "./empty-drop-area";
 import { ElementNode } from "./element-node";
+import { EmptyDropArea } from "./empty-drop-area";
 
 interface ElementDropZoneProps {
   parentId: string | null;
@@ -12,9 +12,7 @@ interface ElementDropZoneProps {
 
 function ElementDropZoneComponent({ parentId }: ElementDropZoneProps) {
   const childIds = useBuilderStore(
-    useShallow((state) =>
-      getChildIds(state.rootIds, state.groupIds, parentId)
-    )
+    useShallow((state) => getChildIds(state.rootIds, state.groupIds, parentId))
   );
 
   if (childIds.length === 0) {
@@ -22,9 +20,17 @@ function ElementDropZoneComponent({ parentId }: ElementDropZoneProps) {
   }
 
   return (
-    <Flex direction="column" gap="xs" component="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+    <Flex
+      direction="column"
+      gap="xs"
+      component="ul"
+      style={{ listStyle: "none", margin: 0, padding: 0 }}
+    >
       {childIds.map((childId) => (
-        <ElementNode key={childId} elementId={childId} />
+        <ElementNode
+          key={childId}
+          elementId={childId}
+        />
       ))}
     </Flex>
   );
@@ -35,7 +41,7 @@ function getChildIds(
   groupIds: Record<string, string[]>,
   parentId: string | null
 ): string[] {
-  return parentId === null ? rootIds : groupIds[parentId] ?? [];
+  return parentId === null ? rootIds : (groupIds[parentId] ?? []);
 }
 
 export const ElementDropZone = memo(ElementDropZoneComponent);

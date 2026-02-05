@@ -1,9 +1,9 @@
 import { NumberInput, Select, Stack, Text, Textarea, TextInput } from "@mantine/core";
 import { useMemo } from "react";
+import { useShallow } from "zustand/shallow";
 import type { BuilderElementSchemaTypes } from "../elements";
 import { useBuilderContext } from "../hooks/use-builder-context";
 import { useBuilderStore } from "../hooks/use-builder-store";
-import { useShallow } from "zustand/shallow";
 
 interface ElementFormProps {
   elementId: string;
@@ -13,8 +13,8 @@ export function ElementForm({ elementId }: ElementFormProps) {
   const { elementSchemas } = useBuilderContext();
   const handleUpdateProperty = useBuilderStore((state) => state.handleUpdateProperty);
   const element = useBuilderStore(useShallow((state) => state.elements[elementId]));
-  console.log(element)
-  const elementSchema = elementSchemas[element.type as BuilderElementSchemaTypes]
+  console.log(element);
+  const elementSchema = elementSchemas[element.type as BuilderElementSchemaTypes];
 
   const renderFields = useMemo(() => {
     return Object.entries(elementSchema.propsSchema).map(([key, value]) => {

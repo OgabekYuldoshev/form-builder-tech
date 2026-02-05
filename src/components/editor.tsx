@@ -1,11 +1,11 @@
 import { Box, Input } from "@mantine/core";
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
-import StarterKit from "@tiptap/starter-kit";
-import TextAlign from "@tiptap/extension-text-align";
-import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import TextAlign from "@tiptap/extension-text-align";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 
 const DISABLED_OPACITY = 0.7;
@@ -46,7 +46,7 @@ export function Editor({
   id,
   placeholder: _placeholder = "Yozing...",
   hideToolbar = false,
-  className,
+  className
 }: EditorProps) {
   const editor = useEditor({
     shouldRerenderOnTransaction: true,
@@ -57,12 +57,12 @@ export function Editor({
       Superscript,
       SubScript,
       Highlight,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      TextAlign.configure({ types: ["heading", "paragraph"] })
     ],
     content: value,
     onUpdate: ({ editor }) => {
       onChange?.(editor.getHTML());
-    },
+    }
   });
 
   useEffect(() => {
@@ -90,7 +90,10 @@ export function Editor({
         style={{ pointerEvents: disabled ? "none" : undefined }}
       >
         {!hideToolbar && (
-          <RichTextEditor.Toolbar sticky stickyOffset="var(--docs-header-height)">
+          <RichTextEditor.Toolbar
+            sticky
+            stickyOffset="var(--docs-header-height)"
+          >
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />
               <RichTextEditor.Italic />

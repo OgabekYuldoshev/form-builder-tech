@@ -1,8 +1,8 @@
 import type { Icon } from "@tabler/icons-react";
-import type { BuilderElementSchemas, BuilderElementSchemaTypes } from "./elements";
 import type { JSX } from "react";
+import type { BuilderElementSchemas, BuilderElementSchemaTypes } from "./elements";
 
-type WithAllowedChildren<T> = T & { children?: JSX.Element};
+type WithAllowedChildren<T> = T & { children?: JSX.Element };
 
 type AnyProps = Record<string, unknown>;
 

@@ -10,12 +10,12 @@ import styles from "./empty-drop-area.module.scss";
 interface EmptyDropAreaProps {
   parentId: string | null;
 }
-export function EmptyDropArea({parentId}: EmptyDropAreaProps) {
+export function EmptyDropArea({ parentId }: EmptyDropAreaProps) {
   const handleInsert = useBuilderStore((state) => state.handleInsert);
   const [isOver, setIsOver] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
 
-  console.log(parentId)
+  console.log(parentId);
 
   useEffect(() => {
     invariant(elementRef.current, "Element ref not found");

@@ -1,6 +1,6 @@
 import { Box } from "@mantine/core";
-import { memo } from "react";
 import invariant from "invariant";
+import { memo } from "react";
 import { useShallow } from "zustand/shallow";
 import type { BuilderElementSchemaTypes } from "../elements";
 import { useBuilderContext } from "../hooks/use-builder-context";
@@ -26,41 +26,32 @@ interface ElementNodeProps {
 
 function ElementNodeComponent({ elementId }: ElementNodeProps) {
   const elementSchemas = useBuilderContext()?.elementSchemas;
-  const element = useBuilderStore(
-    useShallow((state) => state.elements[elementId])
-  );
+  const element = useBuilderStore(useShallow((state) => state.elements[elementId]));
 
   if (element == null) return null;
 
-  invariant(
-    elementSchemas != null,
-    "ElementNode must be used within BuilderContext"
-  );
+  invariant(elementSchemas != null, "ElementNode must be used within BuilderContext");
 
   const schema = elementSchemas[element.type as BuilderElementSchemaTypes];
 
-  invariant(
-    schema != null,
-    `Unknown element type: ${element.type} (elementId: ${elementId})`
-  );
+  invariant(schema != null, `Unknown element type: ${element.type} (elementId: ${elementId})`);
 
   const isContainer = isContainerSchema(schema);
-  const children = isContainer ? (
-    <ElementDropZone parentId={elementId} />
-  ) : undefined;
+  const children = isContainer ? <ElementDropZone parentId={elementId} /> : undefined;
 
   const renderProps = {
     ...element,
-    ...(children != null && { children }),
+    ...(children != null && { children })
   };
 
-  const component = schema.render(
-    renderProps
-  );
+  const component = schema.render(renderProps);
 
   return (
     <ElementWrapper elementInstance={element}>
-      <Box component="div" style={{ pointerEvents: "none" }}>
+      <Box
+        component="div"
+        style={{ pointerEvents: "none" }}
+      >
         {component}
       </Box>
     </ElementWrapper>

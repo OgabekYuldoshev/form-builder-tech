@@ -14,20 +14,20 @@ export const EditorElement: ElementSchema<EditorElementProps> = {
   defaultProps: {
     label: "Editor",
     placeholder: "Editor placeholder",
-    content: "",
+    content: ""
   },
   propsSchema: {
     label: {
       type: "input",
-      label: "Label",
+      label: "Label"
     },
     placeholder: {
       type: "input",
-      label: "Placeholder",
+      label: "Placeholder"
     },
     content: {
       type: "textarea",
-      label: "Content",
+      label: "Content"
     }
   },
   render({ id, props }) {
@@ -40,5 +40,5 @@ export const EditorElement: ElementSchema<EditorElementProps> = {
         disabled
       />
     );
-  },
+  }
 };

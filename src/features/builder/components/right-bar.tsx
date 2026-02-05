@@ -5,7 +5,6 @@ import { ElementForm } from "./element-form";
 export function RightBar() {
   const selectedElementId = useBuilderStore((state) => state.selectedElementId);
 
-
   if (!selectedElementId) {
     return (
       <Stack

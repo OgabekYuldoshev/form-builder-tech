@@ -8,7 +8,7 @@ interface BuilderStore {
   rootIds: string[];
   containers: Record<string, string[]>;
   selectedNodeId: string | null;
-  handleInsert(): void;
+  handleInsert(elementNode: ElementNode): void;
   handleUpdate(): void;
   handleDelete(): void;
   handleMove(): void;
@@ -26,7 +26,42 @@ function createBuilderStore(initialState: Partial<BuilderStore> = {}) {
         containers: {},
         selectedNodeId: null,
         ...initialState,
-        handleInsert: () => {},
+        handleInsert: (elementNode) =>
+          set((state) => {
+            if (elementNode.parentId === null) {
+              state.rootIds = [
+                ...state.rootIds.slice(0, elementNode.position),
+                elementNode.id,
+                ...state.rootIds.slice(elementNode.position)
+              ];
+
+              state.rootIds.forEach((id, index) => {
+                if (state.nodes[id]) {
+                  state.nodes[id].position = index;
+                } else {
+                  state.nodes[id] = elementNode;
+                }
+              });
+            } else {
+              if (!state.containers[elementNode.parentId]) {
+                state.containers[elementNode.parentId] = [];
+              }
+
+              state.containers[elementNode.parentId] = [
+                ...state.containers[elementNode.parentId].slice(0, elementNode.position),
+                elementNode.id,
+                ...state.containers[elementNode.parentId].slice(elementNode.position)
+              ];
+
+              state.containers[elementNode.parentId].forEach((id, index) => {
+                if (state.nodes[id]) {
+                  state.nodes[id].position = index;
+                } else {
+                  state.nodes[id] = elementNode;
+                }
+              });
+            }
+          }),
         handleUpdate: () => {},
         handleDelete: () => {},
         handleMove: () => {},

@@ -1,5 +1,10 @@
-import { Box } from "@mantine/core";
+import { Container } from "@mantine/core";
+import { ElementDropzone } from "./element-dropzone";
 
 export function Playground() {
-  return <Box>Playground</Box>;
+  return (
+    <Container>
+      <ElementDropzone parentId={null} />
+    </Container>
+  );
 }

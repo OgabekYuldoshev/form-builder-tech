@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { BuilderContext } from "@/context";
 import type { BuilderElement, BuilderElementKey } from "@/elements";
 import { createBuilderStore } from "@/store";
+import { BuilderContext } from "@/context/builder-context";
 
 interface BuilderProviderProps {
   elementSchema: Record<BuilderElementKey, BuilderElement>;

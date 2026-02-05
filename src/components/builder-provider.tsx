@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import type { BuilderElement, BuilderElementKey } from "@/elements";
-import { createBuilderStore } from "@/store";
 import { BuilderContext } from "@/context/builder-context";
+import type { BuilderElementKey, BuilderElementSchema } from "@/elements";
+import { createBuilderStore } from "@/store";
 
 interface BuilderProviderProps {
-  elementSchema: Record<BuilderElementKey, BuilderElement>;
+  elementSchema: Record<BuilderElementKey, BuilderElementSchema>;
   children: React.ReactNode;
 }
 

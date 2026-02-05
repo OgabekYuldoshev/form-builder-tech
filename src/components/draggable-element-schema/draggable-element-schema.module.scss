@@ -1,0 +1,18 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  border: 1px solid var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-sm);
+  cursor: grab;
+  transition: border-color 0.2s ease-in-out;
+
+  &:hover {
+    border-color: var(--mantine-color-blue-4);
+  }
+
+  &[data-dragging="true"] {
+    opacity: 0.5;
+    border-color: var(--mantine-color-blue-4);
+  }
+}

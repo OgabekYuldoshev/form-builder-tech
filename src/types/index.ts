@@ -56,7 +56,7 @@ interface ElementSchema<P = AnyProps> {
   propsSchema: {
     [Key in keyof P]: ElementPropField<P[Key]>;
   };
-  allowedChildren?: string[]
+  allowedChildren?: string[];
   render: (props: WithChildren<ElementNode<P>>) => React.ReactNode;
 }
 

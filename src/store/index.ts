@@ -11,7 +11,7 @@ interface BuilderStore {
   handleInsert(elementNode: ElementNode): void;
   handleUpdate(): void;
   handleDelete(elementNodeId: string): void;
-  handleMove(): void;
+  handleMove(elementNodeId: string, targetParentId: string | null, targetPosition: number): void;
   handleSelectNode(value: string | null): void;
 }
 
@@ -69,14 +69,66 @@ function createBuilderStore(initialState: Partial<BuilderStore> = {}) {
               state.selectedNodeId = null;
             }
 
-            if (state.rootIds.includes(elementNodeId)) {
+            const node = state.nodes[elementNodeId];
+
+            if (node?.parentId != null && state.containers[node.parentId]) {
+              state.containers[node.parentId] = state.containers[node.parentId].filter(
+                (id) => id !== elementNodeId
+              );
+            } else if (state.rootIds.includes(elementNodeId)) {
               state.rootIds = state.rootIds.filter((id) => id !== elementNodeId);
             }
 
             delete state.nodes[elementNodeId];
           });
         },
-        handleMove: () => {},
+        handleMove: (elementNodeId, targetParentId, targetPosition) =>
+          set((state) => {
+            const node = state.nodes[elementNodeId];
+            if (!node) return;
+
+            const currentParentId = node.parentId;
+            const currentIds =
+              currentParentId == null ? state.rootIds : (state.containers[currentParentId] ?? []);
+            const currentIndex = currentIds.indexOf(elementNodeId);
+            if (currentIndex === -1) return;
+
+            // O'chirish - eski joydan
+            if (currentParentId == null) {
+              state.rootIds = state.rootIds.filter((id) => id !== elementNodeId);
+            } else {
+              state.containers[currentParentId] = state.containers[currentParentId].filter(
+                (id) => id !== elementNodeId
+              );
+            }
+
+            // Qo'shish - yangi joyga
+            const targetIds =
+              targetParentId == null ? state.rootIds : (state.containers[targetParentId] ?? []);
+
+            const newIds = [
+              ...targetIds.slice(0, targetPosition),
+              elementNodeId,
+              ...targetIds.slice(targetPosition)
+            ];
+
+            if (targetParentId == null) {
+              state.rootIds = newIds;
+            } else {
+              if (!state.containers[targetParentId]) {
+                state.containers[targetParentId] = [];
+              }
+              state.containers[targetParentId] = newIds;
+            }
+
+            // Position larni yangilash
+            newIds.forEach((id, index) => {
+              if (state.nodes[id]) {
+                state.nodes[id].position = index;
+                state.nodes[id].parentId = targetParentId;
+              }
+            });
+          }),
         handleSelectNode: (value) =>
           set((state) => {
             state.selectedNodeId = value;

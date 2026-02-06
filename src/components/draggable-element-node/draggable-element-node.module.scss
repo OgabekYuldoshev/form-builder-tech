@@ -6,14 +6,9 @@
     border: 1px solid transparent;
     border-radius: var(--mantine-radius-sm);
   
-    &:hover{
+    &:hover {
       border-color: var(--mantine-color-blue-4);
       background-color: var(--mantine-color-blue-0);
-  
-      .actions{
-        opacity: 1;
-        visibility: visible;
-      }
     }
   
     &[data-selected="true"]{
@@ -44,4 +39,10 @@
       opacity: 1;
       visibility: visible;
     }
+    
+  }
+
+  .wrapper:hover .actions {
+    opacity: 1;
+    visibility: visible;
   }

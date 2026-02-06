@@ -15,7 +15,7 @@ export const GroupElement: ElementSchema<GroupProps> = {
   propsSchema: {
     title: { type: "text", label: "Title" }
   },
-  allowedChildren: ["title"],
+  allowedChildren: ["title", 'input', "group"],
   render: ({ props, children }) => {
     return (
       <Paper

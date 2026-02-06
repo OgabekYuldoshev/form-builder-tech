@@ -161,6 +161,14 @@ function DraggableElementNodeComponent({ elementNodeId }: DraggableElementNodePr
             return;
           }
 
+          if (
+            element &&
+            target.element !== element &&
+            element.contains(target.element)
+          ) {
+            return;
+          }
+
           const targetData = target.data as DraggableElementNodeData;
           const targetNode = targetData.elementNode;
           const state = store.getState();
@@ -196,7 +204,7 @@ function DraggableElementNodeComponent({ elementNodeId }: DraggableElementNodePr
         }
       })
     );
-  }, [elementNode, initialData, handleInsert, handleMove, elementSchema, schema]);
+  }, [elementNode, initialData, handleInsert, handleMove]);
 
   return (
     <Box

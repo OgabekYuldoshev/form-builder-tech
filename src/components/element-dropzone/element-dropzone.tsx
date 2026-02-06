@@ -1,5 +1,5 @@
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { Box, Flex, Stack, Text } from "@mantine/core";
+import { Box, Flex, Text } from "@mantine/core";
 import invariant from "invariant";
 import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
@@ -23,16 +23,12 @@ function ElementDropzone({ parentId }: ElementDropzoneProps) {
     return <EmptyDropzone parentId={parentId} />;
   }
 
-  return (
-    <Stack>
-      {childIds.map((id) => (
-        <DraggableElementNode
-          key={id}
-          elementNodeId={id}
-        />
-      ))}
-    </Stack>
-  );
+  return childIds.map((id) => (
+    <DraggableElementNode
+      key={id}
+      elementNodeId={id}
+    />
+  ));
 }
 
 function EmptyDropzone({ parentId }: { parentId: string | null }) {
